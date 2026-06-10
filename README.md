@@ -7,6 +7,23 @@
 
 ![genre](https://img.shields.io/badge/genre-weird--fiction%20mystery-1d2b33) ![chapters](https://img.shields.io/badge/chapters-10-ffb347) ![engine](https://img.shields.io/badge/engine-vanilla%20JS%20%2B%20canvas%20%2B%20webaudio-7de8d8) ![deps](https://img.shields.io/badge/dependencies-0-b9a7e8)
 
+<table>
+<tr>
+<td><img src="docs/shots/01-menu.png" alt="title — analog dusk over Greyhollow"></td>
+<td><img src="docs/shots/05-tower-top.png" alt="ch3 — the stream that never ended"></td>
+</tr>
+<tr>
+<td><img src="docs/shots/04-mall-veil.png" alt="ch2 — the mall of unsent messages, open for business"></td>
+<td><img src="docs/shots/07-cathedral.png" alt="ch5 — the choir of hollow voices"></td>
+</tr>
+<tr>
+<td><img src="docs/shots/11-deep-veil.png" alt="ch9 — the deep Veil: the Quiet, and a door half-stenciled"></td>
+<td><img src="docs/shots/12-finale.png" alt="ch10 — both worlds in the same shot, the song of naming"></td>
+</tr>
+</table>
+
+<sub>更多场景见 [docs/shots/](docs/shots/) — 全部画面为程序化 Canvas 实时绘制，零图片资源。</sub>
+
 ---
 
 ## ▶ 运行 · How to play

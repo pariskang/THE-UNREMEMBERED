@@ -39,6 +39,10 @@ await page.waitForTimeout(700);
 
 for (const [name, code, veil] of shots) {
   await page.evaluate(code);
+  await page.evaluate(() => {
+    ["#dlg", "#fakehud", "#hud", "#choices", "#card", "#titlecard", "#panel", "#objective", "#toasts"]
+      .forEach((s) => { const el = G.U.$(s); el && el.classList.add("hidden"); });
+  });
   await page.waitForTimeout(1600);
   await page.screenshot({ path: `docs/shots/${name}.png` });
 }

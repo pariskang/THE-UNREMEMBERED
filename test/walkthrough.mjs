@@ -161,6 +161,10 @@ for (let iter = 0; iter < 4000; iter++) {
 
   // progress watchdog
   const sig = await page.evaluate(() => (G.U.$("#dlg-text").textContent || "") + "|" + (G.U.$("#card-text").textContent || "") + "|" + G.state.d.chapter);
+  if (iter % 30 === 0) {
+    const pt = await page.evaluate(() => (G.U.$("#panel").classList.contains("hidden") ? "-" : G.U.$("#panel-title").textContent.slice(0, 60)));
+    console.log(`[hb] iter=${iter} ch=${ch} panel="${pt}" sig="${sig.slice(0, 70).replace(/\n/g, " ")}"`);
+  }
   if (sig !== lastSig) { lastSig = sig; lastProgress = Date.now(); }
   if (Date.now() - lastProgress > 80000) {
     await page.screenshot({ path: "test/stuck.png" });
