@@ -81,6 +81,8 @@ G.script[3] = [
 
   { t: "bg", id: "street", mood: { nofigure: true }, drone: "town" },
   { t: "narr", text: "Three days later, Greyhollow has a pharmacy with a daughter again. The town absorbs her return the way it absorbs everything: by deciding it was always so. Only the duet, the sheriff, and Juniper herself keep the seam." },
+  { t: "narr", text: "<em>Anchor.</em> Juniper buys them gas-station slushies, the blue kind that doesn't correspond to a fruit. They drink them on the curb in the ordinary night, brain-freeze and all, and the deliberately mundane does what it always does down here: it holds." },
+  { t: "meter", luc: 6 },
   { t: "say", who: "juniper", text: "Before it took me, it <em>talked</em> to me. The Quiet. Everyone assumes it's a thing, but it spoke like a person. Actually—" },
   { t: "say", who: "juniper", text: "—like two people. In harmony. A voice that sings and a voice that... <em>measures</em>. They finished each other's silences. Whatever the Quiet is, it used to be a <b>pair</b>." },
   { t: "card", wound: true, text: "A singer and a measurer. Two voices, perfectly in tune.<br><br>The Quiet has been a duet all along —<br>and it has already met one of you." },

@@ -27,7 +27,8 @@ G.script[10] = [
       G.state.mark("stage.quality", q, "stage built at quality " + q);
       for (const m of kept) { G.hud.toast("VERSE — " + m.label); G.audio.voice(64 + (Math.random() * 12 | 0), undefined, .8, { vol: .07 }); await G.U.sleep(750); }
       if (delivered) { G.hud.toast("VERSE — " + delivered + " undelivered message" + (delivered > 1 ? "s" : "") + ", finally sent"); await G.U.sleep(750); }
-      for (const w of S.woke) { G.hud.toast("CHORUS — a woken voice: " + w); await G.U.sleep(600); }
+      const wokeNames = { vale: "Ms. Vale", ruth: "Ruth", dev: "Dev", okafor: "Mr. Okafor", mom: "her mother" };
+      for (const w of S.woke) { G.hud.toast("CHORUS — a woken voice: " + (wokeNames[w] || w)); await G.U.sleep(600); }
       if (bricks) { G.hud.toast("BEAM — " + bricks + " honest brick" + (bricks > 1 ? "s" : "") + " from the road"); await G.U.sleep(750); }
       if (S.hush.uses) { G.hud.toast("REST — " + S.hush.uses + " silence" + (S.hush.uses > 1 ? "s" : "") + " where verses might have been", true); await G.U.sleep(900); }
     } },
@@ -42,6 +43,15 @@ G.script[10] = [
     ], else: [
       { t: "narr", text: "It is a sparse stage. A few true beams, a thin handful of verses — everything that survived a costly, honest run. The Quiet tilts both heads. Sparse is not small. Anyone who has sung in an empty room knows that." },
   ] },
+  { t: "choice", id: "finalTemptation", prompt: "the Quiet stands at the stage's foot. one register would end this instantly.", options: [
+      { k: "sing", label: "Sing the names. Witness them. The long way. The only way that heals.", sub: "what the whole run was for" },
+      { k: "hush", hush: true, label: "HUSH them — two children, finally quiet. It would work. It always works.", sub: "the genre's standard ending. this game lets you try it." },
+  ], branch: {
+      hush: [
+        { t: "narr", text: "She sings the gold register at the Quiet itself — and it works. Of course it works. The stitched smiles relax. The two silhouettes stand perfectly, mercifully still. The town exhales. And nothing — <em>nothing</em> — is healed. The archive hums on below, fed and tidy. Senna's drawer stays shut. Hush ends feelings. It does not end <b>facts</b>." },
+        { t: "say", who: "paris", text: "...They're still there, Moyi. Quieter. That's all we did — we made them easier to ignore. We became the town for eleven seconds. The names are still true. <em>Sing them.</em>" },
+      ],
+  } },
   { t: "do", fn: async (S) => {
       for (;;) {
         const names = [

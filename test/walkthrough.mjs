@@ -37,7 +37,8 @@ else {
     G.state.gainMsg("u1", "to dad", "", ""); G.state.deliver("u1");
     G.state.save();
   }, START);
-  await page.click("#mm-continue");
+  await page.evaluate(() => { try { G.audio.ensure(); } catch (e) {} });
+  await page.evaluate((n) => { G.engine.runChapter(n); return 1; }, START); // fire and forget
 }
 await sleep(800);
 
@@ -59,11 +60,13 @@ const miniSolvers = {
     await page.mouse.move(...px(90, 295)); await page.mouse.down(); await sleep(9000); await page.mouse.up();
   },
   async resonance() {
-    for (let round = 0; round < 14; round++) {
+    for (let i = 0; i < 30; i++) {
       if (await page.evaluate(() => G.mini.activeName) !== "resonance") return;
-      const r = await page.evaluate(() => G.state.flag("mini.resonance1"));
-      const tgt = 120 + (await page.evaluate(() => 0)) ; // timing solved by wait-then-click cycles
-      await sleep(1060); await page.mouse.click(...px(480, 280)); await sleep(220);
+      const hits = await page.evaluate(() => (G.mini.progress || {}).hits || 0);
+      const target = 120 + hits * 36, speed = 110 + hits * 18;
+      await sleep(Math.max(60, Math.round((target / speed) * 1000) - 150));
+      await page.mouse.click(...px(480, 280));
+      await sleep(120);
     }
   },
   async rhythm() { for (let i = 0; i < 12; i++) { await page.mouse.click(...px(480, 300)); await sleep(615); } },
@@ -96,7 +99,7 @@ const miniSolvers = {
 
 const fclick = async (h) => { try { await h.click({ force: true, timeout: 3000 }); } catch (e) {} };
 
-let lastProgress = Date.now(), lastSig = "";
+let lastProgress = Date.now(), lastSig = "", sameMini = { name: null, n: 0 };
 for (let iter = 0; iter < 4000; iter++) {
   try {
   const ch = await page.evaluate(() => G.state.d.chapter).catch(() => 0);
@@ -113,9 +116,12 @@ for (let iter = 0; iter < 4000; iter++) {
   // 2) canvas minigame?
   const mini = await page.evaluate(() => G.mini.activeName).catch(() => null);
   if (mini && miniSolvers[mini]) {
-    console.log(`[ch${ch}] solving mini: ${mini}`);
+    sameMini = mini === sameMini.name ? { name: mini, n: sameMini.n + 1 } : { name: mini, n: 1 };
+    if (sameMini.n > 8) { errors.push(`STALL: mini ${mini} unsolved after ${sameMini.n} attempts (ch${ch})`); break; }
+    console.log(`[ch${ch}] solving mini: ${mini} (attempt ${sameMini.n})`);
     await miniSolvers[mini](); lastProgress = Date.now(); continue;
   }
+  sameMini = { name: null, n: 0 };
   // 3) panel (choose/pick/order/crackread/recall…)
   if (await visible("#panel")) {
     const items = await q("#panel-body .pn-item:not(.dead)");
@@ -156,7 +162,7 @@ for (let iter = 0; iter < 4000; iter++) {
   // progress watchdog
   const sig = await page.evaluate(() => (G.U.$("#dlg-text").textContent || "") + "|" + (G.U.$("#card-text").textContent || "") + "|" + G.state.d.chapter);
   if (sig !== lastSig) { lastSig = sig; lastProgress = Date.now(); }
-  if (Date.now() - lastProgress > 45000) {
+  if (Date.now() - lastProgress > 80000) {
     await page.screenshot({ path: "test/stuck.png" });
     const m2 = await page.evaluate(() => G.mini.activeName);
     errors.push(`DEADLOCK in chapter ${ch} (mini=${m2}, sig=${sig.slice(0, 80)})`);

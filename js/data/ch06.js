@@ -66,6 +66,8 @@ G.script[6] = [
   { t: "narr", text: "The Projected Future takes off its blazer, sets down the red pen, and becomes what it always was underneath: a nine-year-old's drawing of A Scientist, taped to a refrigerator that no longer exists. Asha folds it carefully and puts it in the pencil case, next to the ribbon." },
 
   { t: "say", who: "asha", text: "I'm keeping her. She's not my judge, but she <em>is</em> my drawing. ...You two do this a lot? The descending-into-the-town's-subconscious thing? Because your filing system is a war crime and I am — apparently — no longer busy." },
+  { t: "narr", text: "<em>Anchor.</em> They eat instant noodles at Asha's kitchen counter at 1 AM, the unranked kind of hour, and Asha alphabetizes their entire case file while complaining that she's relaxing wrong. Lucidity, it turns out, is mostly made of this." },
+  { t: "meter", luc: 8 },
   { t: "do", fn: (S) => { S.flags["ally.asha"] = true; G.state.mark("ally.asha", true, "Asha joins — lore-keeper"); } },
   { t: "gain", kind: "memory", id: "ribbon", label: "Asha's Volcano", desc: "PARTICIPANT, age nine, kept soft with handling. The proof that loving the question came before the scores.", loss: "lose the proof that you existed before your metrics" },
   { t: "narr", text: "Lore-keeper Asha's first act: cross-referencing Juniper's testimony — <em>two voices, a singer and a measurer</em> — against the library's basement reels and one brittle flyer in the radio station's donation box:" },

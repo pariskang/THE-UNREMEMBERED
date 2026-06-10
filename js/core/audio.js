@@ -57,6 +57,7 @@ G.audio = (() => {
 
   /* ---------- voice: one sung note ---------- */
   function voice(m, at, dur, opt = {}) {
+    if (at == null || !isFinite(at)) at = t0();
     const o = ctx.createOscillator(), o2 = ctx.createOscillator();
     const g = ctx.createGain(), g2 = ctx.createGain();
     const det = opt.detune || 0;

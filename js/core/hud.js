@@ -135,6 +135,21 @@ G.hud = (() => {
   /* wire pause inputs */
   window.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#hud").classList.contains("hidden")) togglePause(); });
   $("#pausebtn").addEventListener("click", () => togglePause());
+  $("#satchel").addEventListener("click", () => {
+    if (!$("#panel").classList.contains("hidden")) return; // a real panel is busy
+    const S = G.state.d;
+    if (!S.undelivereds.length) { toast("the satchel is empty. for now."); return; }
+    G.mini.choosePanel({
+      title: "UNDELIVEREDS — in stock, never delivered",
+      note: "deliver them when the world makes a place for them. or hold them. holding is also a choice.",
+      items: S.undelivereds.map((u) => ({
+        label: (u.delivered ? "✓ " : "✉ ") + u.label,
+        desc: (u.body || "") + (u.from ? `<br><i>— ${u.from}</i>` : ""),
+        dead: u.delivered,
+      })),
+      allowNone: true, confirm: "close",
+    });
+  });
   $("#fh-pausebtn") && ($("#fh-pausebtn").onclick = () => {});
 
   return {

@@ -92,6 +92,8 @@ G.script[4] = [
   { t: "say", who: "moyi", text: "You built me a staircase once. I figure I owe you infrastructure. We're not okay yet — you don't get 'okay' for free. But we're <em>standing</em>, and I've recently learned that's a technical term." },
   { t: "do", fn: (S) => { S.estranged = false; S.flags["house.tension"] = true; G.hud.meters(); } },
   { t: "drone", name: "night" },
+  { t: "narr", text: "<em>Anchor.</em> They spend the last hour before dawn in his garage, fixing the old radio — him soldering, her labeling the dial in marginalia. No Veil. No song. Just a machine that's easier than people, being repaired by two people anyway." },
+  { t: "meter", luc: 6, stab: 8 },
   { t: "gain", kind: "memory", id: "demolition", label: "The Controlled Demolition", desc: "Three false houses, brought down on purpose, to a lullaby in a minor key. Nobody was standing under them.", loss: "lose the proof that feelings can be expressed without casualties" },
 
   { t: "card", wound: true, text: "STABILITY — now you know what the meter protects.<br>Drafting under suppressed panic leaves cracks only <em>you</em>, the player, can see.<br>He cannot perceive his own faults. You are now the keeper of them.<br><br>And one house refuses to fall. Something he didn't build is living in it." },

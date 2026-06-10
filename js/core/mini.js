@@ -127,12 +127,16 @@ G.mini = (() => {
 
   /* ================= resonance (trust expressed as timing) ================= */
   function resonance(opts = {}) {
-    const rounds = opts.rounds || 3; let round = 0, r = 0, hits = 0, missFlash = 0;
+    const rounds = opts.rounds || 3; let round = 0, hits = 0, missFlash = 0;
+    let start = performance.now(); // wallclock — fair at any framerate
+    const speed = () => 110 + round * 18;
+    const rNow = () => (((performance.now() - start) / 1000) * speed()) % 320;
     const target = () => 120 + round * 36;
+    G.mini.progress = { hits: 0 };
     return run({
       draw(x, t, dt) {
         const cx = W / 2, cy = H * .52;
-        r += dt * (110 + round * 18); if (r > 320) r = 0;
+        const r = rNow();
         // paris's structure: a drawn shell
         x.strokeStyle = "rgba(255,179,71,.5)"; x.lineWidth = 2;
         x.beginPath(); x.arc(cx, cy, target() + 16, Math.PI * 1.1, Math.PI * 1.9); x.stroke();
@@ -144,12 +148,13 @@ G.mini = (() => {
         G.paint.figure(x, cx + 200, cy + 130, 1.65, "paris", { t });
       },
       onDown() {
-        if (Math.abs(r - target()) < 26) {
-          hits++; round++; r = 0;
+        if (Math.abs(rNow() - target()) < 34) {
+          hits++; round++; start = performance.now();
+          G.mini.progress = { hits };
           G.audio.register("lull"); G.audio.sfx.chime(true);
           G.fx.burst("sparks", 16, { x: W / 2, y: H * .52, color: "#b9a7e8" });
           if (hits >= rounds) { G.state.mark("resonance.first", true, "first resonance"); this.done(true); }
-        } else { missFlash = .4; G.audio.sfx.glitch(); r = 0; }
+        } else { missFlash = .4; G.audio.sfx.glitch(); start = performance.now(); }
       },
     });
   }
@@ -262,11 +267,12 @@ G.mini = (() => {
 
   /* ================= rhythm lullaby (timing in draw clock) ================= */
   function rhythm(opts = {}) {
-    const beats = opts.beats || 8, interval = .62; let elapsed = 0, idx = 0, hits = 0, fl = 0, started = false;
+    const beats = opts.beats || 8, interval = .62; let idx = 0, hits = 0, fl = 0;
+    const start = performance.now(); // wallclock, so the pulses match the sung motif
     G.audio.motif(opts.motif || "lullaby", { beat: .42, shift: opts.shift || 0 });
     return run({
       draw(x, t, dt) {
-        elapsed += dt;
+        const elapsed = (performance.now() - start) / 1000;
         const cx = W / 2, cy = H * .56;
         ring(x, cx, cy, 34, "rgba(125,232,216,.75)", 2.2);
         for (let i = idx; i < beats; i++) {
@@ -279,6 +285,7 @@ G.mini = (() => {
         if (idx >= beats) this.done({ hits, beats });
       },
       onDown() {
+        const elapsed = (performance.now() - start) / 1000;
         const d = Math.abs(idx * interval + .9 - elapsed);
         if (d < .3) { hits++; idx++; fl = .4; G.audio.voice(64 + [0, 3, 5, 7, 10][hits % 5], undefined, .5, { vol: .1 }); }
         else { G.audio.sfx.glitch(); }

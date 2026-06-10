@@ -47,9 +47,14 @@ G.script[8] = [
   { t: "choice", id: "inverted", prompt: "HIS CONTROLS ARE INVERTED — to reach him, read everything backwards", options: [
       { k: "a", label: "PUSH HIM AWAY — (the controls are inverted. this pulls him in.)", sub: "trust the inversion" },
       { k: "b", label: "PULL HIM CLOSE — (the controls are inverted. this throws him into the breach.)", sub: "the honest-looking option. tonight, honesty looks wrong." },
+      { k: "hush", hush: true, label: "HUSH THE NIGHT — make the breach stop feeling anything at all.", sub: "it will work. it always works. that was never the question." },
   ], branch: {
       b: [ { t: "narr", text: "She pulls — and the inverted night throws him toward the breach; she catches his sleeve at the cost of the west vault, which goes up in light. The inversion does not care that she meant well. Inversions never do." }, { t: "meter", luc: -6 } ],
       a: [ { t: "narr", text: "She pushes — every instinct screaming — and the inverted night folds him back to her like a door swinging shut against a storm. Trusting the wrongness. There's a lesson in that she'd rather not have needed." } ],
+      hush: [
+        { t: "narr", text: "She sings the gold register, and the storm simply... files itself. The inversion uninverts. Paris walks out of a breach that no longer has an opinion about him. Effortless. Optimal. Somewhere, the soundtrack gets one shade thinner, permanently — and far below, something with two faces smiles a little wider, because every use is a brick in <em>its</em> road." },
+        { t: "hud", op: "toast", text: "HUSH — it worked. it always works.", wrong: true },
+      ],
   } },
   { t: "do", fn: () => G.paint.mood({ scatter: true, broken: 1 }) },
   { t: "fx", op: "on", args: ["ash"] },
