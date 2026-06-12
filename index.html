@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>THE UNREMEMBERED — 未被记得的人</title>
+<meta name="description" content="A weird-fiction mystery in ten chapters. They don't go missing here. They go unremembered.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='none' stroke='%237de8d8' stroke-width='1.5' stroke-dasharray='3 2'/></svg>">
+</head>
+<body class="boot">
+
+<div id="frame">
+  <div id="stage">
+    <canvas id="scene" width="960" height="540"></canvas>
+
+    <!-- ====== diegetic overlays (CRT / grain / vignette) ====== -->
+    <div id="crt" aria-hidden="true"></div>
+    <div id="grain" aria-hidden="true"></div>
+    <div id="vignette" aria-hidden="true"></div>
+    <div id="flash" aria-hidden="true"></div>
+
+    <!-- ====== cold-open "ordinary game" HUD (chapter 1 only) ====== -->
+    <div id="fakehud" class="hidden">
+      <div class="fh" id="fh-hp"><span class="fh-label">VITALITY</span><div class="fh-bar"><i style="width:86%"></i></div></div>
+      <div class="fh" id="fh-map"><div class="fh-minimap"><b></b></div></div>
+      <div class="fh" id="fh-quest"><span class="fh-label">◆ OBJECTIVE</span><span id="fh-quest-text">walk home</span></div>
+      <div class="fh" id="fh-pausebtn">II</div>
+    </div>
+
+    <!-- ====== real HUD ====== -->
+    <div id="hud" class="hidden">
+      <div id="meters">
+        <div class="meter" id="m-luc" title="Lucidity — what Moyi can still verify">
+          <span class="m-glyph">☾</span>
+          <div class="m-track"><i id="m-luc-fill"></i></div>
+          <span class="m-name">LUCIDITY</span>
+        </div>
+        <div id="m-link" title="Resonance">∿</div>
+        <div class="meter" id="m-stab" title="Stability — what Paris can still hold">
+          <span class="m-glyph">⏚</span>
+          <div class="m-track"><i id="m-stab-fill"></i></div>
+          <span class="m-name">STABILITY</span>
+        </div>
+      </div>
+      <div id="satchel" title="Undelivereds — messages that never made it">✉ <b id="satchel-n">0</b></div>
+      <div id="registers" class="hidden"></div>
+      <div id="pausebtn" title="pause [Esc]">||</div>
+    </div>
+
+    <div id="toasts"></div>
+    <div id="objective" class="hidden"><span class="obj-mark">◆</span> <span id="objective-text"></span></div>
+
+    <!-- ====== dialogue ====== -->
+    <div id="dlg" class="hidden">
+      <div id="dlg-chip"><span id="dlg-name"></span></div>
+      <div id="dlg-text"></div>
+      <div id="dlg-more">▼</div>
+    </div>
+
+    <!-- ====== choices ====== -->
+    <div id="choices" class="hidden"></div>
+
+    <!-- ====== interstitials ====== -->
+    <div id="card" class="hidden"><div id="card-text"></div></div>
+    <div id="titlecard" class="hidden">
+      <div class="tc-n"></div>
+      <div class="tc-en"></div>
+      <div class="tc-zh"></div>
+      <div class="tc-rule"></div>
+      <div class="tc-tag"></div>
+    </div>
+
+    <!-- ====== phone (chapter 1) ====== -->
+    <div id="phone" class="hidden">
+      <div class="ph-top"><span class="ph-time">9:47 PM</span><span class="ph-sig">▂▄▆ ◦◦</span></div>
+      <div class="ph-name">moyi ☾</div>
+      <div class="ph-thread" id="ph-thread"></div>
+      <div class="ph-compose"><span id="ph-draft"></span><i class="ph-caret"></i></div>
+      <div class="ph-actions"><button id="ph-send">send</button><button id="ph-del">delete</button></div>
+    </div>
+
+    <!-- ====== generic panel (memory burning, triage, recall, files…) ====== -->
+    <div id="panel" class="hidden">
+      <div id="panel-title"></div>
+      <div id="panel-body"></div>
+      <div id="panel-foot"></div>
+    </div>
+
+    <!-- ====== FEEL IT ====== -->
+    <div id="feelit" class="hidden"><div id="feelit-ring"></div><span>FEEL&nbsp;IT</span></div>
+
+    <!-- ====== pause menu ====== -->
+    <div id="pause" class="hidden">
+      <div class="pz-box">
+        <div class="pz-title">— paused —</div>
+        <div class="pz-items" id="pz-items"></div>
+      </div>
+    </div>
+
+    <!-- ====== main menu ====== -->
+    <div id="mainmenu">
+      <canvas id="menucanvas" width="960" height="540"></canvas>
+      <div class="mm-inner">
+        <div class="mm-eyebrow">a weird-fiction mystery in ten chapters</div>
+        <h1 class="mm-title">THE<br>UNREMEMBERED</h1>
+        <div class="mm-zh">未 被 记 得 的 人</div>
+        <div class="mm-line">People here don't go missing. They go <em>unremembered.</em></div>
+        <div class="mm-items">
+          <button id="mm-new">begin</button>
+          <button id="mm-continue" class="hidden">continue</button>
+          <button id="mm-chapters" class="hidden">chapters</button>
+          <button id="mm-sound">sound: on</button>
+        </div>
+        <div class="mm-foot">headphones recommended · 建议佩戴耳机 · 约 90–120 分钟</div>
+      </div>
+    </div>
+
+    <div id="chapselect" class="hidden">
+      <div class="cs-title">TEN CHAPTERS</div>
+      <div id="cs-list"></div>
+      <button id="cs-back">back</button>
+    </div>
+
+    <div id="credits" class="hidden"><div id="credits-roll"></div></div>
+  </div>
+</div>
+
+<script src="js/core/util.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/core/state.js"></script>
+<script src="js/core/paint.js"></script>
+<script src="js/core/fx.js"></script>
+<script src="js/core/hud.js"></script>
+<script src="js/core/mini.js"></script>
+<script src="js/core/engine.js"></script>
+<script src="js/data/ch01.js"></script>
+<script src="js/data/ch02.js"></script>
+<script src="js/data/ch03.js"></script>
+<script src="js/data/ch04.js"></script>
+<script src="js/data/ch05.js"></script>
+<script src="js/data/ch06.js"></script>
+<script src="js/data/ch07.js"></script>
+<script src="js/data/ch08.js"></script>
+<script src="js/data/ch09.js"></script>
+<script src="js/data/ch10.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
